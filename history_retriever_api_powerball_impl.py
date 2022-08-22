@@ -11,6 +11,25 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
     def retrieve_history(self):
         logging.info(f'Retrieving history...')
 
+        start_end_dates = self.build_date_ranges()
+
+        all_time_drawing_data = []
+        for start_end_date_tuple in start_end_dates:
+            drawing_records_list = self.fetch_powerball_drawings_for_range(start_end_date_tuple, self.url)
+            all_time_drawing_data.extend(drawing_records_list)
+
+        # the api sometimes returns duplicates - this cleans them out
+        clean_all_time_drawing_data = [this_drawing for index, this_drawing in enumerate(all_time_drawing_data)
+                                       if this_drawing not in all_time_drawing_data[index + 1:]]
+
+        regular_numbers_drawn = self.get_regular_numbers_drawn(clean_all_time_drawing_data)
+
+        powerball_numbers_drawn = self.get_powerball_numbers_drawn(clean_all_time_drawing_data)
+
+        return LotteryHistory(regular_numbers_drawn, powerball_numbers_drawn)
+
+    @staticmethod
+    def build_date_ranges():
         # powerball's api returns a max of 100 draws at a time
         # hence, we'd have to paginate the requests
         # get about 6 months (180 days) worth of data in a batch(page)
@@ -26,32 +45,35 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
             page_end_date = end_date - timedelta(seconds=1)
             start_end_dates.append((page_start_date, page_end_date))
 
-        all_time_drawing_data = []
-        for start_end_date_pair in start_end_dates:
+        return start_end_dates
 
-            page_start_date_string = start_end_date_pair[0].strftime("%Y-%m-%d %H:%M:%S")
-            page_end_date_string = start_end_date_pair[1].strftime("%Y-%m-%d %H:%M:%S")
-            page_url = self.url.format(start_datetime=page_start_date_string, end_datetime=page_end_date_string)
-            response = requests.get(page_url)
+    @staticmethod
+    def fetch_powerball_drawings_for_range(start_end_date_tuple, url_template):
 
-            logging.info(f'Powerball page url: {page_url}')
-            logging.info(f'HTTP Status Code: {response.status_code}')
-            logging.info(f'History Response: {response.content}')
+        datetime_format = "%Y-%m-%d %H:%M:%S"
+        page_start_date_string = start_end_date_tuple[0].strftime(datetime_format)
+        page_end_date_string = start_end_date_tuple[1].strftime(datetime_format)
+        page_url = url_template.format(start_datetime=page_start_date_string, end_datetime=page_end_date_string)
+        response = requests.get(page_url)
 
-            drawing_records_list = json.loads(response.content)
-            all_time_drawing_data.extend(drawing_records_list)
+        logging.info(f'Powerball page url: {page_url}')
+        logging.info(f'HTTP Status Code: {response.status_code}')
+        logging.info(f'History Response: {response.content}')
 
-        # the api sometimes returns duplicates - this cleans them out
-        clean_all_time_drawing_data = [this_drawing for index, this_drawing in enumerate(all_time_drawing_data)
-                                       if this_drawing not in all_time_drawing_data[index + 1:]]
+        drawing_records_list = json.loads(response.content)
+        return drawing_records_list
+
+    @staticmethod
+    def get_regular_numbers_drawn(historic_draw_data):
 
         regular_number_draws = [drawing['field_winning_numbers'].split(',')[0:5]
-                                for drawing in clean_all_time_drawing_data]
+                                for drawing in historic_draw_data]
         regular_numbers_drawn = [number_drawn for drawing in regular_number_draws for number_drawn in drawing]
-        regular_numbers_drawn = list(map(int, regular_numbers_drawn))
+        return list(map(int, regular_numbers_drawn))
+
+    @staticmethod
+    def get_powerball_numbers_drawn(historic_draw_data):
 
         powerball_numbers_drawn = [drawing['field_winning_numbers'].split(',')[5]
-                                   for drawing in clean_all_time_drawing_data]
-        powerball_numbers_drawn = list(map(int, powerball_numbers_drawn))
-
-        return LotteryHistory(regular_numbers_drawn, powerball_numbers_drawn)
+                                   for drawing in historic_draw_data]
+        return list(map(int, powerball_numbers_drawn))
