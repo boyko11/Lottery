@@ -30,6 +30,10 @@ def draw_numbers(history_retriever, num_samples):
                                                       history.special_numbers_drawn_list)
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
+
+    for sample in slightly_smarter_samples:
+        sample['regular_numbers'] = ', '.join([str(num) for num in sample['regular_numbers']])
+
     return slightly_smarter_samples
 
 

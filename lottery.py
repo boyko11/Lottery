@@ -39,6 +39,6 @@ if __name__ == '__main__':
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
     for sample in slightly_smarter_samples:
-        print(sample['regular_numbers'])
+        print(', '.join([str(num) for num in sample['regular_numbers']]))
         print(sample['special_number'])
         print('--------')
