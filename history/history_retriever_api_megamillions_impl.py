@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 import json
 from logger import logging
 from model.lottery_history import LotteryHistory
-from history_retriever_api import HistoryRetrieverApi
+from history.history_retriever_api import HistoryRetrieverApi
 
 
 class HistoryRetrieverApiMegaMillionsImpl(HistoryRetrieverApi):

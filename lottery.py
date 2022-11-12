@@ -1,9 +1,10 @@
 from logger import logging
-from history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
-from history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
+from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
+from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
 from slightly_smarter_sampler import SlightlySmarterSampler
 import config
 import sys
+import numpy as np
 
 if __name__ == '__main__':
 
@@ -37,7 +38,7 @@ if __name__ == '__main__':
                                                       history.special_numbers_drawn_list)
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
-    for index, sample in enumerate(slightly_smarter_samples):
-        print(sample.tolist())
-        if index % 2 != 0:
-            print('----')
+    for sample in slightly_smarter_samples:
+        print(sample['regular_numbers'])
+        print(sample['special_number'])
+        print('--------')

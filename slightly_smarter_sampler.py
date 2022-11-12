@@ -43,9 +43,12 @@ class SlightlySmarterSampler:
                                              p=regular_numbers_and_probabilities.probabilities)
             drawn_numbers = np.sort(drawn_numbers)
             drawn_special_number = np.random.choice(special_numbers_and_probabilities.numbers, 1,
-                                                    p=special_numbers_and_probabilities.probabilities)
+                                                    p=special_numbers_and_probabilities.probabilities)[0]
+            sample = {
+                "regular_numbers": drawn_numbers.astype(np.int).tolist(),
+                "special_number": drawn_special_number.astype(np.int).item()
+            }
 
-            samples.append(drawn_numbers.astype(np.int))
-            samples.append(drawn_special_number.astype(np.int))
+            samples.append(sample)
 
         return samples
