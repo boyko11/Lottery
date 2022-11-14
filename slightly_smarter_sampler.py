@@ -12,7 +12,6 @@ class SlightlySmarterSampler:
 
     @staticmethod
     def calculate_probabilities(history):
-
         numbers_counts = dict(collections.Counter(history))
         # list of tuples - first element is the number,
         # second element is the count of hom many times the number has been drawn in the past
@@ -21,9 +20,16 @@ class SlightlySmarterSampler:
         logging.info('Numbers by descending drawings counts:')
         logging.info(numbers_counts_descending)
 
-        number_frequencies_inverted = 1 / np.array([float(num_count_tuple[1]) for num_count_tuple in
-                                                    numbers_counts_descending])
-        number_next_draw_probability = number_frequencies_inverted / sum(number_frequencies_inverted)
+        frequencies = [float(num_count_tuple[1]) for num_count_tuple in numbers_counts_descending]
+
+        frequencies_max = np.max(frequencies)
+        frequencies_min = np.min(frequencies)
+        number_frequencies_flipped = (frequencies_min + frequencies_max) - frequencies
+
+        softmax_base = np.random.uniform(low=1.02, high=1.04)
+        number_next_draw_probability = np.power(softmax_base, number_frequencies_flipped) / \
+                                       np.sum(np.power(softmax_base, number_frequencies_flipped))
+
         logging.info('number_next_draw_probability:')
         logging.info(number_next_draw_probability)
 
@@ -33,7 +39,6 @@ class SlightlySmarterSampler:
         return NumbersAndProbabilities(numbers_to_draw_from, number_next_draw_probability)
 
     def sample(self, num_samples=1, num_per_samples=5):
-
         regular_numbers_and_probabilities = self.calculate_probabilities(self.regular_history)
         special_numbers_and_probabilities = self.calculate_probabilities(self.special_number_history)
 
