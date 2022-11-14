@@ -27,5 +27,28 @@ python lottery.py power 3
 
 ```
 
+OR build as docker flask container:
+```bash
+docker image build -t lottery_web .
+```
+
+Then run on whatever port you like:
+```bash
+docker run -p 8000:4637 -d lottery_web
+
+# one sample powerball
+http://localhost:8000/pb?num_samples=1
+
+# seven samples of mega millions
+http://localhost:8000/mm?num_samples=7
+
+# default num_samples is 5
+# ie, if num_samples isn't specified, the API will return five samples:
+http://localhost:8000/pb
+
+```
+
+
+
 ## License
 Feel free to use anyway you like. Cheers!
