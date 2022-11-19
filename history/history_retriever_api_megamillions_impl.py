@@ -25,9 +25,11 @@ class HistoryRetrieverApiMegaMillionsImpl(HistoryRetrieverApi):
         n4_history = [this_drawing['N4'] for this_drawing in json_object['DrawingData']]
         n5_history = [this_drawing['N5'] for this_drawing in json_object['DrawingData']]
 
+        most_recent_draw_date = json_object['DrawingData'][0]['PlayDate']
+
         all_numbers_history = n1_history + n2_history + n3_history + n4_history + n5_history
         special_number_history = [this_drawing['MBall']
                                   for this_drawing in json_object['DrawingData']
                                   ]
 
-        return LotteryHistory(all_numbers_history, special_number_history)
+        return LotteryHistory(all_numbers_history, special_number_history, most_recent_draw_date)

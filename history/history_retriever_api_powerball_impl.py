@@ -26,7 +26,9 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
 
         powerball_numbers_drawn = self.get_powerball_numbers_drawn(clean_all_time_drawing_data)
 
-        return LotteryHistory(regular_numbers_drawn, powerball_numbers_drawn)
+        most_recent_powerball_draw_date = max([drawing['field_draw_date'] for drawing in clean_all_time_drawing_data])
+
+        return LotteryHistory(regular_numbers_drawn, powerball_numbers_drawn, most_recent_powerball_draw_date)
 
     @staticmethod
     def build_date_ranges():

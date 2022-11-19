@@ -1,3 +1,4 @@
+APScheduler==3.9.1.post1
 beautifulsoup4==4.11.1
 certifi==2022.6.15
 charset-normalizer==2.1.0
@@ -9,8 +10,13 @@ itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.1
 numpy==1.23.1
+pytz==2022.6
+pytz-deprecation-shim==0.1.0.post0
 requests==2.28.1
+six==1.16.0
 soupsieve==2.3.2.post1
+tzdata==2022.6
+tzlocal==4.2
 urllib3==1.26.11
 Werkzeug==2.2.2
 zipp==3.10.0

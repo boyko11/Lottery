@@ -1,0 +1,2 @@
+POWERBALL = "powerball"
+MEGAMILLIONS = "megamillions"
