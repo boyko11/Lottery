@@ -1,10 +1,9 @@
-from logger import logging
+from main.logger import logging
 from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
 from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
-from slightly_smarter_sampler import SlightlySmarterSampler
-import config
+from main.slightly_smarter_sampler import SlightlySmarterSampler
+from config import config
 import sys
-import numpy as np
 
 if __name__ == '__main__':
 

@@ -2,14 +2,10 @@ import os
 
 from flask import Flask, request
 
-import common_constants
-import config
-import logging
+from config import common_constants
 import atexit
-from cache_service import CacheService
-from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
-from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
-from slightly_smarter_sampler import SlightlySmarterSampler
+from main.cache_service import CacheService
+from main.slightly_smarter_sampler import SlightlySmarterSampler
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
@@ -20,12 +16,14 @@ cache_service = CacheService()
 @app.route('/pb', methods=['GET'])
 def powerball():
     num_samples = request.args.get('num_samples', default=5, type=int)
+    num_samples = min(100, num_samples)
     return draw_numbers(common_constants.POWERBALL, num_samples)
 
 
 @app.route('/mm', methods=['GET'])
 def megamillions():
     num_samples = request.args.get('num_samples', default=5, type=int)
+    num_samples = min(100, num_samples)
     return draw_numbers(common_constants.MEGAMILLIONS, num_samples)
 
 

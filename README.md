@@ -27,9 +27,9 @@ python lottery.py power 3
 
 ```
 
-OR build as docker flask container:
+OR build as docker flask container from the project root dir(not from the docker subdir)
 ```bash
-docker image build -t lottery_web .
+docker image build -t lottery_web -f docker/Dockerfile .
 ```
 
 Then run on whatever port you like:

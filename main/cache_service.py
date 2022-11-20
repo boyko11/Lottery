@@ -1,8 +1,7 @@
 import logging
 
-import common_constants
 import requests
-import config
+from config import config, common_constants
 import json
 from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
 from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
