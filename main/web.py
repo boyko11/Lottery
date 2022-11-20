@@ -35,7 +35,7 @@ def draw_numbers(which_lotto, num_samples):
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
 
-    for sample in slightly_smarter_samples:
+    for sample in slightly_smarter_samples['samples']:
         sample['regular_numbers'] = ', '.join([str(num) for num in sample['regular_numbers']])
 
     return slightly_smarter_samples

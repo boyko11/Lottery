@@ -36,7 +36,7 @@ class SlightlySmarterSampler:
         numbers_to_draw_from = np.array([float(num_count_tuple[0]) for num_count_tuple in
                                          numbers_counts_descending])
 
-        return NumbersAndProbabilities(numbers_to_draw_from, number_next_draw_probability)
+        return NumbersAndProbabilities(numbers_to_draw_from, number_next_draw_probability, softmax_base)
 
     def sample(self, num_samples=1, num_per_samples=5):
         regular_numbers_and_probabilities = self.calculate_probabilities(self.regular_history)
@@ -56,4 +56,10 @@ class SlightlySmarterSampler:
 
             samples.append(sample)
 
-        return samples
+        return {
+            "samples": samples,
+            "softmax_base": {
+                "regular": regular_numbers_and_probabilities.softmax_base,
+                "special": special_numbers_and_probabilities.softmax_base
+            }
+        }
