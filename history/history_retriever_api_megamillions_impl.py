@@ -1,7 +1,6 @@
 import requests
 from xml.etree import ElementTree
 import json
-from main.logger import logging
 from model.lottery_history import LotteryHistory
 from history.history_retriever_api import HistoryRetrieverApi
 
@@ -9,13 +8,13 @@ from history.history_retriever_api import HistoryRetrieverApi
 class HistoryRetrieverApiMegaMillionsImpl(HistoryRetrieverApi):
 
     def retrieve_history(self):
-        logging.info(f'Retrieving {type} history.')
+        self.logger.info(f'Retrieving {type} history.')
 
         response = requests.get(self.url)
-        logging.info(f'HTTP Status Code: {response.status_code}')
+        self.logger.info(f'HTTP Status Code: {response.status_code}')
 
         string_xml = ElementTree.fromstring(response.content)
-        logging.info(f'{type} History Response: {string_xml.text}')
+        self.logger.info(f'{type} History Response: {string_xml.text}')
 
         json_object = json.loads(string_xml.text)
 

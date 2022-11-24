@@ -1,6 +1,5 @@
 import requests
 import json
-from main.logger import logging
 from model.lottery_history import LotteryHistory
 from history.history_retriever_api import HistoryRetrieverApi
 from datetime import datetime, timedelta
@@ -9,7 +8,7 @@ from datetime import datetime, timedelta
 class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
 
     def retrieve_history(self):
-        logging.info(f'Retrieving history...')
+        self.logger.info(f'Retrieving history...')
 
         start_end_dates = self.build_date_ranges()
 
@@ -49,8 +48,7 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
 
         return start_end_dates
 
-    @staticmethod
-    def fetch_powerball_drawings_for_range(start_end_date_tuple, url_template):
+    def fetch_powerball_drawings_for_range(self, start_end_date_tuple, url_template):
 
         datetime_format = "%Y-%m-%d %H:%M:%S"
         page_start_date_string = start_end_date_tuple[0].strftime(datetime_format)
@@ -58,9 +56,9 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
         page_url = url_template.format(start_datetime=page_start_date_string, end_datetime=page_end_date_string)
         response = requests.get(page_url)
 
-        logging.info(f'Powerball page url: {page_url}')
-        logging.info(f'HTTP Status Code: {response.status_code}')
-        logging.info(f'History Response: {response.content}')
+        self.logger.info(f'Powerball page url: {page_url}')
+        self.logger.info(f'HTTP Status Code: {response.status_code}')
+        self.logger.info(f'History Response: {response.content}')
 
         drawing_records_list = json.loads(response.content)
         return drawing_records_list

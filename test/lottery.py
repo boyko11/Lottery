@@ -1,4 +1,6 @@
-from main.logger import logging
+import json
+
+from main.logger import LotteryLogger
 from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
 from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
 from main.slightly_smarter_sampler import SlightlySmarterSampler
@@ -6,6 +8,8 @@ from config import config
 import sys
 
 if __name__ == '__main__':
+
+    logger = LotteryLogger('test_lottery.log')
 
     if len(sys.argv) != 3:
         print("Usage: python lottery.py mega $integer_number_draws")
@@ -27,17 +31,23 @@ if __name__ == '__main__':
     which_lotto = sys.argv[1].lower()
     num_samples = int(sys.argv[2])
 
-    logging.info(f'Drawing {num_samples} samples for {which_lotto}...')
+    logger.info(f'Drawing {num_samples} samples for {which_lotto}...')
 
-    history_retriever = HistoryRetrieverApiMegaMillionsImpl(config.megamillions_history_url) if which_lotto == 'mega' \
-        else HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template)
+    history_retriever = HistoryRetrieverApiMegaMillionsImpl(config.megamillions_history_url, logger) if which_lotto == 'mega' \
+        else HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template, logger)
 
     history = history_retriever.retrieve_history()
     slightly_smarter_sampler = SlightlySmarterSampler(history.regular_numbers_drawn_list,
-                                                      history.special_numbers_drawn_list)
+                                                      history.special_numbers_drawn_list, logger)
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
-    for sample in slightly_smarter_samples:
+
+    # print(json.dumps(slightly_smarter_samples, indent=2))
+
+    for sample in slightly_smarter_samples['samples']:
         print(', '.join([str(num) for num in sample['regular_numbers']]))
         print(sample['special_number'])
-        print('--------')
+        print('------------')
+
+    print("softmax_base: ")
+    print(json.dumps(slightly_smarter_samples['softmax_base']))

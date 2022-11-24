@@ -14,28 +14,18 @@ pip install -r requirements.txt
 
 ## Usage
 
+Build as docker flask container from the project root dir(not from the docker subdir)
 ```bash
-# Examples:
-# sample 5 draws of MegaMillions
-python lottery.py mega 5
-
-# sample 1 draw of Powerball
-python lottery.py power 1
-
-# sample 3 draws of Powerball
-python lottery.py power 3
-
-```
-
-OR build as docker flask container from the project root dir(not from the docker subdir)
-```bash
-docker image build -t lottery_web -f docker/Dockerfile .
+docker build . -t lottery_web:latest -f docker/Dockerfile
 ```
 
 Then run on whatever port you like:
 ```bash
 docker run -p 8000:4637 -d lottery_web
-
+# if you want to map logs directory to a local host directory:
+docker run -v /Users/btodorov/lottery_logs_1:/app/logs -p 8000:4637 -d lottery_web
+```
+```
 # one sample powerball
 http://localhost:8000/pb?num_samples=1
 
@@ -45,6 +35,21 @@ http://localhost:8000/mm?num_samples=7
 # default num_samples is 5
 # ie, if num_samples isn't specified, the API will return five samples:
 http://localhost:8000/pb
+
+```
+
+Running as script:
+
+```bash
+# Examples:
+# sample 5 draws of MegaMillions
+python -m test.lottery 5
+
+# sample 1 draw of Powerball
+python -m test.lottery power 1
+
+# sample 3 draws of Powerball
+python -m test.lottery power 3
 
 ```
 

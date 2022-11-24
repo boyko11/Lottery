@@ -10,12 +10,13 @@ from xml.etree import ElementTree
 
 class CacheService:
 
-    def __init__(self):
+    def __init__(self, logger):
 
         self.history = {
             common_constants.POWERBALL: None,
             common_constants.MEGAMILLIONS: None
         }
+        self.logger = logger
 
     def cache_history(self, which_lotto, history):
 
@@ -27,52 +28,52 @@ class CacheService:
 
     def get_and_cache_powerball_history(self):
 
-        logging.info("Retreiving POWERBALL history...")
-        pb_history_retriever = HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template)
+        self.logger.info("Retreiving POWERBALL history...")
+        pb_history_retriever = HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template, self.logger)
         pb_history = pb_history_retriever.retrieve_history()
-        logging.info("Retreived POWERBALL history.")
+        self.logger.info("Retreived POWERBALL history.")
         self.cache_history(common_constants.POWERBALL, pb_history)
-        logging.info("Cached POWERBALL history.")
+        self.logger.info("Cached POWERBALL history.")
 
     def get_and_cache_megamillions_history(self):
 
-        logging.info("Retreiving MEGAMILLIONS history...")
-        mm_history_retriever = HistoryRetrieverApiMegaMillionsImpl(config.megamillions_history_url)
+        self.logger.info("Retreiving MEGAMILLIONS history...")
+        mm_history_retriever = HistoryRetrieverApiMegaMillionsImpl(config.megamillions_history_url, self.logger)
         mm_history = mm_history_retriever.retrieve_history()
-        logging.info("Retreived MEGAMILLIONS history.")
+        self.logger.info("Retreived MEGAMILLIONS history.")
         self.cache_history(common_constants.MEGAMILLIONS, mm_history)
-        logging.info("Cached MEGAMILLIONS history.")
+        self.logger.info("Cached MEGAMILLIONS history.")
 
     def refresh_when_new_numbers_powerball(self):
 
         response = requests.get(config.powerball_most_recent_url)
 
-        logging.info(f'Powerball most recent url: {config.powerball_most_recent_url}')
-        logging.info(f'HTTP Status Code: {response.status_code}')
+        self.logger.info(f'Powerball most recent url: {config.powerball_most_recent_url}')
+        self.logger.info(f'HTTP Status Code: {response.status_code}')
 
         drawing_records_list = json.loads(response.content)
 
         most_recent_date = drawing_records_list[0]['field_draw_date']
 
-        logging.info(f'Most recent cached date: {self.history[common_constants.POWERBALL].most_recent_draw_date:}, '
+        self.logger.info(f'Most recent cached date: {self.history[common_constants.POWERBALL].most_recent_draw_date:}, '
                      f'most recent drawing date: {most_recent_date}')
 
         if most_recent_date == self.history[common_constants.POWERBALL].most_recent_draw_date:
-            logging.info('No Powerball Refresh needed.')
+            self.logger.info('No Powerball Refresh needed.')
             return
 
-        logging.info('Refreshing cache...')
+        self.logger.info('Refreshing cache...')
 
         self.get_and_cache_powerball_history()
 
-        logging.info('Cache refreshed.')
+        self.logger.info('Cache refreshed.')
 
     def refresh_when_new_numbers_megamillions(self):
 
         response = requests.get(config.megamillions_most_recent_url)
 
-        logging.info(f'MegaMillions most recent url: {config.megamillions_most_recent_url}')
-        logging.info(f'HTTP Status Code: {response.status_code}')
+        self.logger.info(f'MegaMillions most recent url: {config.megamillions_most_recent_url}')
+        self.logger.info(f'HTTP Status Code: {response.status_code}')
 
         string_xml = ElementTree.fromstring(response.content)
 
@@ -80,14 +81,14 @@ class CacheService:
 
         most_recent_date = json_object['Drawing']['PlayDate']
 
-        logging.info(f'Most recent cached date: {self.history[common_constants.MEGAMILLIONS].most_recent_draw_date:}, '
+        self.logger.info(f'Most recent cached date: {self.history[common_constants.MEGAMILLIONS].most_recent_draw_date:}, '
                      f'most recent drawing date: {most_recent_date}')
 
         if most_recent_date == self.history[common_constants.MEGAMILLIONS].most_recent_draw_date:
-            logging.info('No MegaMillions Refresh needed.')
+            self.logger.info('No MegaMillions Refresh needed.')
             return
 
-        logging.info('Refreshing cache...')
+        self.logger.info('Refreshing cache...')
 
         self.get_and_cache_megamillions_history()
 

@@ -7,10 +7,12 @@ import atexit
 from main.cache_service import CacheService
 from main.slightly_smarter_sampler import SlightlySmarterSampler
 from apscheduler.schedulers.background import BackgroundScheduler
+from logger import LotteryLogger
 
 
 app = Flask(__name__)
-cache_service = CacheService()
+logger = LotteryLogger('./logs/lottery.log')
+cache_service = CacheService(logger)
 
 
 @app.route('/pb', methods=['GET'])
@@ -31,7 +33,7 @@ def draw_numbers(which_lotto, num_samples):
 
     history = cache_service.get_history(which_lotto)
     slightly_smarter_sampler = SlightlySmarterSampler(history.regular_numbers_drawn_list,
-                                                      history.special_numbers_drawn_list)
+                                                      history.special_numbers_drawn_list, logger)
 
     slightly_smarter_samples = slightly_smarter_sampler.sample(num_samples=num_samples)
 

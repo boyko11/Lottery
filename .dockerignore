@@ -1,0 +1,11 @@
+venv
+.idea
+.dockerignore
+.git
+.gitignore
+README.md
+**/__pycache__
+**/lottery.log
+**/lottery.log*
+lottery_web.tar
+test_lottery*
