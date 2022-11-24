@@ -23,7 +23,9 @@ Then run on whatever port you like:
 ```bash
 docker run -p 8000:4637 -d lottery_web
 # if you want to map logs directory to a local host directory:
-docker run -v /Users/btodorov/lottery_logs_1:/app/logs -p 8000:4637 -d lottery_web
+docker run -v /var/log/lottery1:/app/logs -p 8765:4637 -d lottery_web
+docker run -v /var/log/lottery2:/app/logs -p 8766:4637 -d lottery_web
+docker run -v /var/log/lottery3:/app/logs -p 8767:4637 -d lottery_web
 ```
 ```
 # one sample powerball
