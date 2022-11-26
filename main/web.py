@@ -8,6 +8,7 @@ from main.cache_service import CacheService
 from main.slightly_smarter_sampler import SlightlySmarterSampler
 from apscheduler.schedulers.background import BackgroundScheduler
 from logger import LotteryLogger
+from waitress import serve
 
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ def draw_numbers(which_lotto, num_samples):
 
     return slightly_smarter_samples
 
+
 if __name__ == "__main__":
 
     cache_service.get_and_cache_powerball_history()
@@ -52,5 +54,7 @@ if __name__ == "__main__":
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
-    port = int(os.environ.get('PORT', 4637))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    # port = int(os.environ.get('PORT', 4637))
+    # app.run(debug=True, host='0.0.0.0', port=port)
+
+    serve(app, host="0.0.0.0", port=4637)
