@@ -1,7 +1,4 @@
-import os
-
 from flask import Flask, request
-
 from config import common_constants
 import atexit
 from main.cache_service import CacheService
@@ -53,8 +50,5 @@ if __name__ == "__main__":
     scheduler.add_job(func=cache_service.refresh_when_new_numbers, trigger="interval", seconds=600)
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
-
-    # port = int(os.environ.get('PORT', 4637))
-    # app.run(debug=True, host='0.0.0.0', port=port)
 
     serve(app, host="0.0.0.0", port=4637)

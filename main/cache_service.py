@@ -1,5 +1,4 @@
 import logging
-
 import requests
 from config import config, common_constants
 import json

@@ -1,5 +1,4 @@
 import json
-
 from main.logger import LotteryLogger
 from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
 from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
