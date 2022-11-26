@@ -17,8 +17,8 @@ class SlightlySmarterSampler:
         # second element is the count of hom many times the number has been drawn in the past
         numbers_counts_descending = sorted(numbers_counts.items(), key=lambda x: x[1], reverse=True)
 
-        self.logger.info('Numbers by descending drawings counts:')
-        self.logger.info(numbers_counts_descending)
+        self.logger.debug('Numbers by descending drawings counts:')
+        self.logger.debug(numbers_counts_descending)
 
         frequencies = [float(num_count_tuple[1]) for num_count_tuple in numbers_counts_descending]
 
@@ -30,8 +30,8 @@ class SlightlySmarterSampler:
         number_next_draw_probability = np.power(softmax_base, number_frequencies_flipped) / \
                                        np.sum(np.power(softmax_base, number_frequencies_flipped))
 
-        self.logger.info('number_next_draw_probability:')
-        self.logger.info(number_next_draw_probability)
+        self.logger.debug('number_next_draw_probability:')
+        self.logger.debug(number_next_draw_probability)
 
         numbers_to_draw_from = np.array([float(num_count_tuple[0]) for num_count_tuple in
                                          numbers_counts_descending])
