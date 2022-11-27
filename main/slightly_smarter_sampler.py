@@ -58,7 +58,7 @@ class SlightlySmarterSampler:
         return {
             "samples": samples,
             "softmax_base": {
-                "regular": regular_numbers_and_probabilities.softmax_base,
-                "special": special_numbers_and_probabilities.softmax_base
+                "regular": round(regular_numbers_and_probabilities.softmax_base, 4),
+                "special": round(special_numbers_and_probabilities.softmax_base, 4)
             }
         }
