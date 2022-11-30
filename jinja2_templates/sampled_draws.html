@@ -6,39 +6,41 @@
     <meta charset="UTF-8">
     <title>{{which_lotto}} Sampled Draws</title>
     <style>
-        table {border: 1px solid #ccc;border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;}table caption {font-size: 1.5em;margin: .5em 0 .75em;}table tr {background-color: #f8f8f8;border: 1px solid #ddd;padding: .35em;}table tr:nth-child(even) {background-color: white;}table th, table td {padding: .625em;text-align: center;}table th {font-size: .85em;letter-spacing: .1em;text-transform: uppercase;}table td.special {color: red;}@media screen and (max-width: 600px) {table {border: 0;}table caption {font-size: 1.3em;}table thead {border: none;clip: rect(0 0 0 0);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}table tr {border-bottom: 3px solid #ddd;display: block;margin-bottom: .625em;}table td {border-bottom: 1px solid #ddd;display: block;font-size: .8em;text-align: right;}table td::before {content: attr(data-label);float: left;font-weight: bold;text-transform: uppercase;}table td:last-child {border-bottom: 0;}}body {font-family: "Open Sans", sans-serif;line-height: 1.25;}
+        div.table-container { margin: auto;width: 92%; } a:link, a:visited {color: #007cff;}a:hover {color: #0002cb;} table {border: 1px solid #ccc;border-collapse: collapse;margin: 0;padding: 0;width: 100%;table-layout: fixed;}table caption {font-size: 1.5em;margin: .5em 0 .75em;color:#7c7c7c;}table tr {background-color: #f8f8f8;border: 1px solid #ddd;padding: .35em;}table tr:nth-child(even) {background-color: white;}table th, table td {padding: .625em;text-align: center;font-size: 1.5em;}table th {font-size: .85em;letter-spacing: .1em;text-transform: uppercase;}table td.special {color: red;}@media screen and (max-width: 600px) {table {border: 0;}table caption {font-size: 1.3em;}table thead {border: none;clip: rect(0 0 0 0);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}table tr {border-bottom: 3px solid #ddd;display: block;margin-bottom: .625em;}table td {border-bottom: 1px solid #ddd;display: block;font-size: .8em;text-align: right;}table td::before {content: attr(data-label);float: left;font-weight: bold;text-transform: uppercase;}table td:last-child {border-bottom: 0;}}body {font-family: cursive;line-height: 1.25;}
     </style>
 </head>
 <body>
+  <div class="table-container">
+      <a href="/" style="font-size: 1.3em">Home</a>
+      <table>
+          <caption>{{which_lotto}} Sampled Draws</caption>
+          {% for sample in samples %}
+            <tr>
+                {% for regular_number in sample.regular_numbers %}
+                <td>
+                    {{regular_number}}
+                </td>
+                {% endfor %}
+                <td class="special">
+                    {{sample.special_number}}
+                </td>
+            </tr>
+          {% endfor %}
 
-  <table>
-      <caption>{{which_lotto}} Sampled Draws</caption>
-      {% for sample in samples %}
-        <tr>
-            {% for regular_number in sample.regular_numbers %}
-            <td>
-                {{regular_number}}
-            </td>
-            {% endfor %}
-            <td class="special">
-                {{sample.special_number}}
-            </td>
-        </tr>
-      {% endfor %}
+      </table>
 
-  </table>
-
-  <table>
-      <caption>Softmax</caption>
-      <tr>
-          <td>Regular: </td>
-          <td>{{softmax_base.regular}}</td>
-      </tr>
-      <tr>
-          <td>Special: </td>
-          <td>{{softmax_base.special}}</td>
-      </tr>
-  </table>
+      <table>
+          <caption>Softmax Base</caption>
+          <tr>
+              <td>Regular: </td>
+              <td>{{softmax_base.regular}}</td>
+          </tr>
+          <tr>
+              <td>Special: </td>
+              <td>{{softmax_base.special}}</td>
+          </tr>
+      </table>
+  </div>
 
 </body>
 </html>

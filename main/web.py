@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from config import common_constants
 import atexit
 from main.cache_service import CacheService
@@ -23,6 +23,12 @@ def powerball():
     sampled_draws = draw_numbers(common_constants.POWERBALL, num_samples)
 
     return sampled_draws_template.render(sampled_draws, which_lotto=common_constants.POWERBALL_Capitalized)
+
+
+@app.route('/', methods=['GET'])
+def home():
+
+    return send_from_directory(common_constants.STATIC_HTML, common_constants.HOME_DOT_HTML)
 
 
 @app.route('/mm', methods=['GET'])
@@ -57,7 +63,8 @@ if __name__ == "__main__":
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
-    # port = int(os.environ.get('PORT', 4637))
-    # app.run(debug=True, host='0.0.0.0', port=port)
+    import os
+    port = int(os.environ.get('PORT', 4637))
+    app.run(debug=True, host='0.0.0.0', port=port)
 
-    serve(app, host="0.0.0.0", port=4637)
+    # serve(app, host="0.0.0.0", port=4637)
