@@ -63,8 +63,8 @@ if __name__ == "__main__":
     scheduler.start()
     atexit.register(lambda: scheduler.shutdown())
 
-    import os
-    port = int(os.environ.get('PORT', 4637))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    # import os
+    # port = int(os.environ.get('PORT', 4637))
+    # app.run(debug=True, host='0.0.0.0', port=port)
 
-    # serve(app, host="0.0.0.0", port=4637)
+    serve(app, host="0.0.0.0", port=4637)
