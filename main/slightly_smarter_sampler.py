@@ -26,6 +26,7 @@ class SlightlySmarterSampler:
         number_frequencies_flipped = (frequencies_min + frequencies_max) - frequencies
 
         softmax_base = np.random.uniform(low=1.02, high=1.04)
+        softmax_base = 1
         number_next_draw_probability = np.power(softmax_base, number_frequencies_flipped) / \
                                        np.sum(np.power(softmax_base, number_frequencies_flipped))
 

@@ -6,3 +6,6 @@ class HistoryRetrieverApi:
 
     def retrieve_history(self):
         print("This is an api. You should provide the necessary implementation in a separate implementation class.")
+
+    def get_most_recent_date(self):
+        pass

@@ -1,4 +1,6 @@
 import json
+
+from history.history_retriever_api_pb_ny_public import HistoryRetrieverApiPbNyPublic
 from main.logger import LotteryLogger
 from history.history_retriever_api_megamillions_impl import HistoryRetrieverApiMegaMillionsImpl
 from history.history_retriever_api_powerball_impl import HistoryRetrieverApiPowerballImpl
@@ -33,7 +35,8 @@ if __name__ == '__main__':
     logger.info(f'Drawing {num_samples} samples for {which_lotto}...')
 
     history_retriever = HistoryRetrieverApiMegaMillionsImpl(config.megamillions_history_url, logger) if which_lotto == 'mega' \
-        else HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template, logger)
+        else HistoryRetrieverApiPbNyPublic(config.powerball_history_url_ny_public, logger)
+        # else HistoryRetrieverApiPowerballImpl(config.powerball_history_url_template, logger)
 
     history = history_retriever.retrieve_history()
     slightly_smarter_sampler = SlightlySmarterSampler(history.regular_numbers_drawn_list,

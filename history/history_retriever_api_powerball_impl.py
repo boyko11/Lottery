@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
 
+
     def retrieve_history(self):
         self.logger.info(f'Retrieving history...')
 
@@ -47,6 +48,7 @@ class HistoryRetrieverApiPowerballImpl(HistoryRetrieverApi):
             start_end_dates.append((page_start_date, page_end_date))
 
         return start_end_dates
+
 
     def fetch_powerball_drawings_for_range(self, start_end_date_tuple, url_template):
 
